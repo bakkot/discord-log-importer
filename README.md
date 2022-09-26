@@ -85,7 +85,21 @@ const LOG_ROOT = '/logs';
           message += ' [logbot could not upload files]';
           files = [];
         }
-        await post(channelId, name, message, files);
+        if (limessagene.length > 1975) {
+          for (let i = 0; i < message.length; i += 1950) {
+            // discord has a maximum message length of 2000 chars
+            let part = message.slice(i, i + 1950);
+            if (i > 0) {
+              part = '... ' + part;
+            }
+            if (i + 1950 < message.length) {
+              part += '...';
+            }
+            await post(channelId, name, part, files);
+          }
+        } else {
+          await post(channelId, name, message, files);
+        }
       }
     }
   }
